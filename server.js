@@ -3,6 +3,10 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const hbs = require('express-handlebars');
 const path = require('path');
+const roomIdGenerator = require('./util/roomIdGenerator.js');
+const mongoose = require('mongoose'); //mongo db
+const config = require('config'); // to access the config file
+const Room = require('./models/Rooms.js');
 
 // import handlers
 const homeHandler = require('./controllers/home.js');
@@ -22,13 +26,36 @@ app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __di
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+const db = config.get('mongoURI');//pull db connection from default.json
+
+mongoose.connect(db,//connect to db
+    err =>{
+        if(err)throw err;
+        console.log("Connected to MongoDB");
+    });
 // set up stylesheets route
 
 // TODO: Add server side code
+// Create endpoint - to create a new room in the database
+app.post("/create", function (req,res){
+    const newRoom = new Room({
+        name: req.body.roomName,
+        id: roomIdGenerator.roomIdGenerator()
+    })
+    newRoom.save().then(console.log("Room has been added")).catch(err => console.log("Error when creating room:", err));
+});
 
+//getRoom - return json of all rooms in the database
+app.get("/getRoom", function(req,res) {
+    Room.find().lean().then(item => {
+        res.json(item);
+    })
+})
 // Create controller handlers to handle requests at each endpoint
 app.get('/', homeHandler.getHome);
 app.get('/:roomName', roomHandler.getRoom);
+
+
 
 // NOTE: This is the sample server.js code we provided, feel free to change the structures
 

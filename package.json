@@ -9,14 +9,25 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "config": "^3.3.7",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
-    "express-handlebars": "^3.1.0"
+    "express-handlebars": "^3.1.0",
+    "hbs": "^4.2.0",
+    "mongoose": "^6.3.3"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
     "nodemon": "^2.0.2",
     "stylelint": "^13.2.0",
     "stylelint-config-standard": "^20.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgustafson2/cs110_lab6.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tgustafson2/cs110_lab6/issues"
+  },
+  "homepage": "https://github.com/tgustafson2/cs110_lab6#readme"
 }
