@@ -4,3 +4,52 @@
     The room you are visiting is {{ roomName }}
 </p>
 <p>To generate a new room, here is the room id: {{ newRoomId }}</p>
+
+{{#if isAvailable}}
+<ul id = "list-template">
+    {{#each chat}}
+    <li><div>Username:{{this.nickname}}</div><div>{{this.Message}}</div><div>Date: {{this.DatePosted}}</div></li>
+    {{/each}}
+</ul>
+{{/if}}
+
+<form action="/{{roomName}}/create" method="POST">
+<input type="text" name="NickName" placeholder="Pease enter a Nickname"/>
+<input type="text" name="message" placeholder="Please enter a chat message"/>
+<input type="submit" value = "create chat"/>
+</form>
+
+<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+
+<script>
+    window.addEventListener('load', function(){
+        fetch("http://localhost:8080/"+{{roomName}});
+        setInterval( async function(){
+            fetch("http://localhost:8080/"+{{roomName}}+"/messages")//maybe 8080 for me
+            .then(response => response.json())
+            .then( data => {
+                var chatJson = data;
+                console.log(chatJson);
+
+                var ul_element = document.getElementById('list-template');
+                ul_element.innerHTML = "";
+                console.log(chatJson.length);
+                for(var j=0; j<chatJson.length; j++){
+                    var li = document.createElement('li');
+                    var div = document.createElement('div');
+                    var div1=document.createElement('div');
+                    var div2=document.createElement('div');
+                    div.innerText = "Username: " +chatJson[j].nickname;
+                    li.appendChild(div);//check how to create message
+                    div1.innerText = chatJson[j].Message;
+                    li.appendChild(div1);
+                    div2.innerText = "Date Posted: "+chatJson[j].DatePosted;
+                    li.appendChild(div2);
+                    ul_element.appendChild(li);
+                }
+            }).catch(err =>{
+                console.log("Error when rendering chat message", err);
+            })
+        },3000)
+    })
+</script>

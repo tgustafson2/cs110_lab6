@@ -5,7 +5,7 @@
 {{#if isAvailable}}
 <ul id = "list-template">
     {{#each rooms}}
-    <li><a href="this.name">{{this.name}}</a></li>
+    <li><a href={{this.name}}>{{this.name}}</a></li>
     {{/each}}
 </ul>
 {{/if}}
@@ -31,7 +31,7 @@
                 console.log(roomJson.length);
                 for(var j=0; j<roomJson.length; j++){
                     var li = document.createElement('li');
-                    li.appendChild(roomJson[j].name);
+                    li.appendChild(roomJson[j].nickname);
                     ul_element.appendChild(li);
                 }
             }).catch(err =>{

@@ -7,6 +7,7 @@ const roomIdGenerator = require('./util/roomIdGenerator.js');
 const mongoose = require('mongoose'); //mongo db
 const config = require('config'); // to access the config file
 const Room = require('./models/Rooms.js');
+const Chat = require('./models/Chats.js');
 
 // import handlers
 const homeHandler = require('./controllers/home.js');
@@ -54,8 +55,23 @@ app.get("/getRoom", function(req,res) {
 // Create controller handlers to handle requests at each endpoint
 app.get('/', homeHandler.getHome);
 app.get('/:roomName', roomHandler.getRoom);
+app.get('/:roomName/messages', function(req,res){
+    Chat.find({Roomname: req.params.roomName}).then(item => {
+        console.log(item);
+        res.json(item);
+    })
+})
 
-
+app.post("/:roomName/create", function (req,res){
+    console.log("in post request");
+    const newChat = new Chat({
+        Roomname: req.params.roomName,
+        nickname: req.body.NickName,
+        Message: req.body.message,
+        DatePosted: Date.now()
+    })
+    newChat.save().then(console.log("Message has been added")).catch(err => console.log("Error when creating room:", err));
+});
 
 // NOTE: This is the sample server.js code we provided, feel free to change the structures
 
