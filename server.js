@@ -39,11 +39,19 @@ mongoose.connect(db,//connect to db
 // TODO: Add server side code
 // Create endpoint - to create a new room in the database
 app.post("/create", function (req,res){
-    const newRoom = new Room({
-        name: req.body.roomName,
-        id: roomIdGenerator.roomIdGenerator()
-    })
-    newRoom.save().then(console.log("Room has been added")).catch(err => console.log("Error when creating room:", err));
+    Room.find({name : req.body.roomName}, function(error, rooms){
+        if(rooms.length===0){
+        const newRoom = new Room({
+            name: req.body.roomName,
+            id: roomIdGenerator.roomIdGenerator()
+        })
+
+        newRoom.save().then(console.log("Room has been added")).catch(err => console.log("Error when creating room:", err));
+    }
+    else{
+        console.log("Room already exists");
+    }
+});
 });
 
 //getRoom - return json of all rooms in the database
