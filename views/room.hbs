@@ -14,18 +14,18 @@
 {{/if}}
 
 <form action="/{{roomName}}/create" method="POST">
-<input type="text" name="NickName" placeholder="Pease enter a Nickname"/>
+<input id="nickname" type="hidden" name="NickName"/>
 <input type="text" name="message" placeholder="Please enter a chat message"/>
-<input type="submit" value = "create chat"/>
+<input type="submit" value = "Send"/>
 </form>
 
 <script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
 
 <script>
     window.addEventListener('load', function(){
-        fetch("http://localhost:8080/"+{{roomName}});
+        fetch("http://localhost:8080/{{roomName}}");
         setInterval( async function(){
-            fetch("http://localhost:8080/"+{{roomName}}+"/messages")//maybe 8080 for me
+            fetch("http://localhost:8080/{{roomName}}/messages")//maybe 8080 for me
             .then(response => response.json())
             .then( data => {
                 var chatJson = data;
@@ -50,6 +50,13 @@
             }).catch(err =>{
                 console.log("Error when rendering chat message", err);
             })
-        },3000)
+        },3000);
+
+        let userName = prompt("How would you like to be displayed as?", "Guest");
+        console.log(userName);
+        if(!userName){
+            userName = "Guest";
+        }
+        document.getElementById('nickname').value = userName;
     })
 </script>

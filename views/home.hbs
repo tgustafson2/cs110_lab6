@@ -31,7 +31,10 @@
                 console.log(roomJson.length);
                 for(var j=0; j<roomJson.length; j++){
                     var li = document.createElement('li');
-                    li.appendChild(roomJson[j].nickname);
+                    let anchor = document.createElement('a');
+                    anchor.href = roomJson[j].name;
+                    anchor.innerText = roomJson[j].name;
+                    li.appendChild(anchor);
                     ul_element.appendChild(li);
                 }
             }).catch(err =>{

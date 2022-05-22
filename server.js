@@ -57,7 +57,7 @@ app.get('/', homeHandler.getHome);
 app.get('/:roomName', roomHandler.getRoom);
 app.get('/:roomName/messages', function(req,res){
     Chat.find({Roomname: req.params.roomName}).then(item => {
-        console.log(item);
+        //console.log(item);
         res.json(item);
     })
 })
@@ -70,7 +70,7 @@ app.post("/:roomName/create", function (req,res){
         Message: req.body.message,
         DatePosted: Date.now()
     })
-    newChat.save().then(console.log("Message has been added")).catch(err => console.log("Error when creating room:", err));
+    newChat.save().then(console.log("Message has been added to /" + newChat.Roomname)).catch(err => console.log("Error when creating room:", err));
 });
 
 // NOTE: This is the sample server.js code we provided, feel free to change the structures
